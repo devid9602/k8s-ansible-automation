@@ -1,0 +1,10 @@
+# To create files
+
+- name: To create a testfile
+  hosts: host1
+  become: true
+  tasks: 
+    - name: Create /tmp/hello.txt
+      copy:
+        dest: /tmp/hello.txt
+        content: "Hello from Ansible!\n"
