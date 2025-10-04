@@ -8,3 +8,4 @@
       copy:
         dest: /tmp/hello.txt
         content: "Hello from Ansible!\n"
+        
