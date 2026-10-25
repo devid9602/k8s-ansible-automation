@@ -8,14 +8,22 @@ spec:
   containers:
   - name: ansible-container
     image: ubuntu:22.04
+    env:
+      - name: ANSIBLE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: ansible-host-credentials
+            key: password
     command: ["/bin/bash", "-c"]
     args:
       - |
+        set -eu
         apt update &&
         apt install -y openssh-server python3 sudo &&
         useradd -m ansible &&
-        : "${ANSIBLE_PASSWORD:?Provide ANSIBLE_PASSWORD through a Kubernetes Secret}" && printf 'ansible:%s
-' "$ANSIBLE_PASSWORD" | chpasswd &&
+        : "${ANSIBLE_PASSWORD:?Provide ANSIBLE_PASSWORD through the referenced Kubernetes Secret}" &&
+        printf 'ansible:%s\n' "$ANSIBLE_PASSWORD" | chpasswd &&
+        unset ANSIBLE_PASSWORD &&
         echo "ansible ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers &&
         mkdir /var/run/sshd &&
         /usr/sbin/sshd -D
