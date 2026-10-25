@@ -1,0 +1,4 @@
+
+# Local Kubernetes credentials
+*.kubeconfig
+*-kubeconfig.yaml
