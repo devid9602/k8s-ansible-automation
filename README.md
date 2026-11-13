@@ -21,7 +21,7 @@ The Pod reads its SSH password from the `ansible-host-credentials` Kubernetes Se
 
 Create the namespace and a Secret containing the lab password. Supply the password through a local environment variable; do not commit it to this repository.
 
-```sh
+```bash
 kubectl create namespace ansible-demo
 read -rsp "Ansible host password: " ANSIBLE_PASSWORD
 echo
@@ -33,20 +33,20 @@ unset ANSIBLE_PASSWORD
 
 Apply the host manifest into that namespace:
 
-```sh
+```bash
 kubectl apply --namespace ansible-demo -f ansible_host_pod.yml
 kubectl get pods,services --namespace ansible-demo
 ```
 
 Update `inventory.ini` to use the cluster node address reachable from the Ansible controller and the Service's NodePort. The checked-in inventory contains sample endpoints; the manifest defines the `host2` target on port `32223`. Then test connectivity:
 
-```sh
+```bash
 ansible -i inventory.ini all -m ping
 ```
 
 To run the namespace playbook instead of creating the namespace with `kubectl`, use:
 
-```sh
+```bash
 ansible-playbook create_namespace.yml
 ```
 
@@ -54,7 +54,7 @@ ansible-playbook create_namespace.yml
 
 Do not expose the NodePort to the public internet. Restrict access to the Ansible controller, use throwaway credentials, and remove the lab when finished:
 
-```sh
+```bash
 kubectl delete namespace ansible-demo
 ```
 
